@@ -515,41 +515,218 @@ def generate_html(pdf_files, output_file):
         }
 
         @media (max-width: 768px) {
+            body {
+                font-size: 16px;
+                -webkit-text-size-adjust: 100%;
+            }
+
+            .top-bar {
+                font-size: 0.7em;
+                padding: 8px 10px;
+            }
+
+            .header-content {
+                padding: 20px 15px 15px;
+            }
+
             h1 {
-                font-size: 2em;
+                font-size: 1.8em;
+                letter-spacing: 1px;
             }
 
             .title-en {
-                font-size: 0.75em;
+                font-size: 0.7em;
+                letter-spacing: 2px;
+            }
+
+            .tagline {
+                font-size: 0.85em;
+                padding: 10px 0;
+            }
+
+            .container {
+                padding: 20px 10px;
+            }
+
+            .breadcrumb {
+                padding: 12px 15px;
+                font-size: 0.85em;
+                margin-bottom: 20px;
             }
 
             .main-content {
-                padding: 25px 20px;
+                padding: 20px 15px;
+                border-radius: 6px;
             }
 
-            .pdf-title {
-                font-size: 1.15em;
-                padding-right: 0;
+            .section-header {
+                margin-bottom: 20px;
+            }
+
+            .section-title {
+                font-size: 1.3em;
+                gap: 8px;
+            }
+
+            .section-icon {
+                font-size: 1em;
+            }
+
+            .stats {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px 20px;
+                gap: 10px;
+                margin-bottom: 25px;
+            }
+
+            .stats-icon {
+                font-size: 2em;
+            }
+
+            .stats-text {
+                font-size: 0.95em;
+            }
+
+            .stats strong {
+                font-size: 1.5em;
+            }
+
+            .pdf-item {
+                margin-bottom: 15px;
+                border-radius: 0 6px 6px 0;
             }
 
             .pdf-item::before {
                 position: static;
                 display: inline-block;
                 margin-bottom: 10px;
+                font-size: 0.6em;
+                padding: 5px 10px;
+            }
+
+            .pdf-link {
+                padding: 20px 15px;
+                min-height: 44px;
+            }
+
+            .pdf-title {
+                font-size: 1.1em;
+                padding-right: 0;
+                margin-bottom: 12px;
             }
 
             .pdf-meta {
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
+            }
+
+            .meta-item {
+                padding: 10px 14px;
+                font-size: 0.9em;
+                min-height: 44px;
+                justify-content: center;
+            }
+
+            .meta-item svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .badge {
+                padding: 10px 14px;
+            }
+
+            footer {
+                margin-top: 40px;
+            }
+
+            .footer-content {
+                padding: 30px 15px 20px;
+            }
+
+            .footer-logo {
+                font-size: 1.3em;
+            }
+
+            .footer-text {
+                font-size: 0.85em;
+            }
+
+            /* Disable hover effects on mobile */
+            .pdf-item:hover {
+                transform: none;
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+            }
+
+            .pdf-item:hover .pdf-title {
+                transform: none;
+            }
+
+            .meta-item:hover {
+                transform: none;
+            }
+
+            /* Improve tap targets */
+            .pdf-link {
+                -webkit-tap-highlight-color: rgba(37, 99, 235, 0.1);
+            }
+
+            /* Reduce animations on mobile for better performance */
+            .stats-icon {
+                animation: none;
+            }
+
+            .section-icon {
+                animation: none;
+            }
+
+            .pdf-item::after {
+                display: none;
+            }
+
+            .top-bar::before {
+                animation: none;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .title-en {
+                font-size: 0.65em;
+            }
+
+            .tagline {
+                font-size: 0.8em;
+                line-height: 1.6;
+            }
+
+            .main-content {
+                padding: 15px 10px;
             }
 
             .section-title {
-                font-size: 1.4em;
+                font-size: 1.2em;
             }
 
-            .stats {
-                flex-direction: column;
-                text-align: center;
+            .pdf-link {
+                padding: 15px 12px;
+            }
+
+            .pdf-title {
+                font-size: 1em;
+            }
+
+            .stats-text {
+                font-size: 0.9em;
+            }
+
+            .footer-logo {
+                font-size: 1.2em;
             }
         }
     </style>
