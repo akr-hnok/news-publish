@@ -62,6 +62,42 @@ def get_pdf_files(directory):
     return pdf_files
 
 
+def copy_pdf_files(pdf_files, source_dir, dest_dir):
+    """
+    Copy PDF files from source directory to destination directory.
+
+    Args:
+        pdf_files: List of tuples (filename, file_info_dict)
+        source_dir: Path to source directory (rss2movie/output)
+        dest_dir: Path to destination directory (backnumber)
+
+    Returns:
+        Number of files copied
+    """
+    import shutil
+
+    # Ensure destination directory exists
+    dest_dir = Path(dest_dir)
+    dest_dir.mkdir(parents=True, exist_ok=True)
+
+    copied_count = 0
+    for filename, info in pdf_files:
+        source_file = Path(source_dir) / filename
+        dest_file = dest_dir / filename
+
+        # Copy file if it exists in source and doesn't exist in destination (or is newer)
+        if source_file.exists():
+            # Copy the file
+            try:
+                shutil.copy2(source_file, dest_file)
+                print(f"  Copied: {filename}")
+                copied_count += 1
+            except Exception as e:
+                print(f"  Warning: Could not copy {filename}: {e}")
+
+    return copied_count
+
+
 def generate_html(pdf_files, output_file):
     """
     Generate HTML index file with links to PDF files.
@@ -835,23 +871,39 @@ def main():
     """Main function to generate index.html."""
     # Define paths
     script_dir = Path(__file__).parent
-    backnumber_dir = script_dir / 'backnumber'
+    # Source: rss2movie/docs/backnumber directory (relative path)
+    source_dir = script_dir / '..' / 'rss2movie' / 'docs' / 'backnumber'
+    # Destination: backnumber directory (for GitHub Pages)
+    dest_dir = script_dir / 'backnumber'
     output_file = script_dir / 'index.html'
 
-    # Check if backnumber directory exists
-    if not backnumber_dir.exists():
-        print(f"Error: Directory '{backnumber_dir}' not found.")
+    # Check if source directory exists
+    if not source_dir.exists():
+        print(f"Error: Source directory '{source_dir}' not found.")
+        print(f"Expected path: {source_dir.resolve()}")
         return
 
-    # Get PDF files
-    pdf_files = get_pdf_files(backnumber_dir)
+    print(f"Source directory: {source_dir.resolve()}")
+    print(f"Destination directory: {dest_dir.resolve()}")
+    print()
+
+    # Get PDF files from source directory
+    pdf_files = get_pdf_files(source_dir)
 
     if not pdf_files:
-        print(f"Warning: No PDF files found in '{backnumber_dir}'.")
+        print(f"Warning: No PDF files found in '{source_dir}'.")
+        print("No files to copy or index.")
     else:
-        print(f"Found {len(pdf_files)} PDF file(s).")
+        print(f"Found {len(pdf_files)} PDF file(s) in source directory.")
+        print()
 
-    # Generate HTML
+        # Copy PDF files to destination directory
+        print("Copying PDF files to backnumber directory...")
+        copied_count = copy_pdf_files(pdf_files, source_dir, dest_dir)
+        print(f"Copied {copied_count}/{len(pdf_files)} file(s).")
+        print()
+
+    # Generate HTML (even if no PDFs, to create empty index)
     generate_html(pdf_files, output_file)
     print(f"Successfully generated '{output_file}'.")
 
