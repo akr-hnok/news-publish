@@ -878,33 +878,43 @@ def main():
     output_file = script_dir / 'index.html'
 
     # Check if source directory exists
-    if not source_dir.exists():
-        print(f"Error: Source directory '{source_dir}' not found.")
-        print(f"Expected path: {source_dir.resolve()}")
-        return
+    if source_dir.exists():
+        print(f"Source directory: {source_dir.resolve()}")
 
-    print(f"Source directory: {source_dir.resolve()}")
-    print(f"Destination directory: {dest_dir.resolve()}")
-    print()
+        # Get PDF files from source directory and copy them
+        source_pdf_files = get_pdf_files(source_dir)
 
-    # Get PDF files from source directory
-    pdf_files = get_pdf_files(source_dir)
+        if source_pdf_files:
+            print(f"Found {len(source_pdf_files)} new PDF file(s) in source directory.")
+            print()
 
-    if not pdf_files:
-        print(f"Warning: No PDF files found in '{source_dir}'.")
-        print("No files to copy or index.")
+            # Copy PDF files to destination directory
+            print("Copying PDF files to backnumber directory...")
+            copied_count = copy_pdf_files(source_pdf_files, source_dir, dest_dir)
+            print(f"Copied {copied_count}/{len(source_pdf_files)} file(s).")
+            print()
+        else:
+            print("No new PDF files found in source directory.")
+            print()
     else:
-        print(f"Found {len(pdf_files)} PDF file(s) in source directory.")
+        print(f"Warning: Source directory '{source_dir.resolve()}' not found.")
+        print("Skipping PDF copy step.")
         print()
 
-        # Copy PDF files to destination directory
-        print("Copying PDF files to backnumber directory...")
-        copied_count = copy_pdf_files(pdf_files, source_dir, dest_dir)
-        print(f"Copied {copied_count}/{len(pdf_files)} file(s).")
+    print(f"Destination directory: {dest_dir.resolve()}")
+
+    # Get ALL PDF files from destination directory (includes old + new PDFs)
+    all_pdf_files = get_pdf_files(dest_dir)
+
+    if all_pdf_files:
+        print(f"Total {len(all_pdf_files)} PDF file(s) in backnumber directory.")
+        print()
+    else:
+        print("Warning: No PDF files found in backnumber directory.")
         print()
 
-    # Generate HTML (even if no PDFs, to create empty index)
-    generate_html(pdf_files, output_file)
+    # Generate HTML from ALL PDFs in destination directory
+    generate_html(all_pdf_files, output_file)
     print(f"Successfully generated '{output_file}'.")
 
 
