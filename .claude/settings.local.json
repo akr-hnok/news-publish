@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(git init:*)",
-      "Bash(gh repo view:*)"
+      "Bash(gh repo view:*)",
+      "Bash(.venv/bin/python:*)",
+      "Bash(.venv/bin/pip:*)"
     ]
   }
 }
